@@ -1,10 +1,12 @@
 // Application-wide constants
 class AppConstants {
   // API endpoints
-  static const String btcPriceApiUrl = 'TODO: Add API endpoint';
+  static const String coinGeckoBaseUrl = 'https://api.coingecko.com/api/v3';
+  static const String marketChartEndpoint = '/coins/bitcoin/market_chart';
+  static const String simplePriceEndpoint = '/simple/price';
   
   // Default values
-  static const Duration defaultUpdateInterval = Duration(minutes: 5);
+  static const Duration defaultUpdateInterval = Duration(seconds: 10);
   static const Duration defaultTrendAnalysisInterval = Duration(hours: 24);
   static const int defaultDaysToAnalyze = 7;
   

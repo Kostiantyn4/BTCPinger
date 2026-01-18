@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:btc_pinger/ui/home_screen.dart';
-import 'package:btc_pinger/ui/settings_screen.dart';
-import 'package:btc_pinger/ui/price_history_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/price/price_bloc.dart';
+import 'bloc/price/price_event.dart';
+import 'database/isar_database.dart';
+import 'database/price_local_data_source.dart';
+import 'repository/price_repository.dart';
+import 'services/btc_price_service.dart';
+import 'ui/home_screen.dart';
+import 'ui/price_history_screen.dart';
+import 'ui/settings_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,13 +20,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BTC Pinger',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-        useMaterial3: true,
+    final repository = PriceRepository(
+      service: BtcPriceService(),
+      localDataSource: PriceLocalDataSource(IsarDatabase.instance),
+    );
+
+    return RepositoryProvider.value(
+      value: repository,
+      child: BlocProvider(
+        create: (_) => PriceBloc(repository)..add(const PriceStarted()),
+        child: MaterialApp(
+          title: 'BTC Pinger',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+            useMaterial3: true,
+          ),
+          home: const MainScreen(),
+        ),
       ),
-      home: const MainScreen(),
     );
   }
 }

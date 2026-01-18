@@ -21,4 +21,7 @@ class AppHelpers {
   static String formatDateTime(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
   }
+
+  // Convenience duration creator
+  static Duration seconds(int value) => Duration(seconds: value);
 }

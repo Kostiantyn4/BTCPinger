@@ -173,7 +173,7 @@ class AnalyticsEngine {
       return const ModelSignal(signal: TradingSignal.hold, confidence: 0);
     }
 
-    MarkovState _classify(double changePercent) {
+    MarkovState classifyChange(double changePercent) {
       if (changePercent > threshold) return MarkovState.up;
       if (changePercent < -threshold) return MarkovState.down;
       return MarkovState.flat;
@@ -186,11 +186,11 @@ class AnalyticsEngine {
       final prev = history[i - 1].price;
       final curr = history[i].price;
       final changePercent = (curr - prev) / prev;
-      final current = _classify(changePercent);
+      final current = classifyChange(changePercent);
       final prevState = previous;
       if (prevState != null) {
-        transitions.putIfAbsent(prevState, () => <MarkovState, int>{})
-          ..update(current, (value) => value + 1, ifAbsent: () => 1);
+        final bucket = transitions.putIfAbsent(prevState, () => <MarkovState, int>{});
+        bucket.update(current, (value) => value + 1, ifAbsent: () => 1);
       }
       previous = current;
     }

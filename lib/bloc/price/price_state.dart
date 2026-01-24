@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+import '../../domain/pipeline/decision/advanced_decision_engine.dart';
 import '../../models/price_entry.dart';
 import '../../models/price_quote.dart';
-import '../../utils/analytics.dart';
 
 enum PriceStatus { initial, loading, success, failure }
 
@@ -14,7 +14,7 @@ class PriceState extends Equatable {
     this.sevenDayChange = 0,
     this.threeDayChange = 0,
     this.trendSignal = false,
-    this.decisionResult,
+    this.advancedDecision,
     this.errorMessage,
   });
 
@@ -24,7 +24,7 @@ class PriceState extends Equatable {
   final double sevenDayChange;
   final double threeDayChange;
   final bool trendSignal;
-  final DecisionResult? decisionResult;
+  final AdvancedDecisionResult? advancedDecision;
   final String? errorMessage;
 
   PriceState copyWith({
@@ -34,7 +34,7 @@ class PriceState extends Equatable {
     double? sevenDayChange,
     double? threeDayChange,
     bool? trendSignal,
-    DecisionResult? decisionResult,
+    AdvancedDecisionResult? advancedDecision,
     String? errorMessage,
   }) {
     return PriceState(
@@ -44,7 +44,7 @@ class PriceState extends Equatable {
       sevenDayChange: sevenDayChange ?? this.sevenDayChange,
       threeDayChange: threeDayChange ?? this.threeDayChange,
       trendSignal: trendSignal ?? this.trendSignal,
-      decisionResult: decisionResult ?? this.decisionResult,
+      advancedDecision: advancedDecision ?? this.advancedDecision,
       errorMessage: errorMessage,
     );
   }
@@ -57,7 +57,7 @@ class PriceState extends Equatable {
         sevenDayChange,
         threeDayChange,
         trendSignal,
-        decisionResult,
+        advancedDecision,
         errorMessage,
       ];
 }

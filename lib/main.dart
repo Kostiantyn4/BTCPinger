@@ -8,6 +8,7 @@ import 'bloc/price/price_bloc.dart';
 import 'bloc/price/price_event.dart';
 import 'database/isar_database.dart';
 import 'database/price_local_data_source.dart';
+import 'domain/pipeline/decision/decision_engine_factory.dart';
 import 'repository/price_repository.dart';
 import 'services/btc_price_service.dart';
 import 'services/notification_service.dart';
@@ -40,14 +41,18 @@ class MyApp extends StatelessWidget {
       service: BtcPriceService(),
       localDataSource: PriceLocalDataSource(IsarDatabase.instance),
     );
+    final decisionEngine = DecisionEngineFactory.fromRepository(repository);
 
     final resolvedNotificationService = notificationService ?? NotificationService();
 
     return RepositoryProvider.value(
       value: repository,
       child: BlocProvider(
-        create: (_) =>
-            PriceBloc(repository, resolvedNotificationService)..add(const PriceStarted()),
+        create: (_) => PriceBloc(
+          repository,
+          resolvedNotificationService,
+          decisionEngine,
+        )..add(const PriceStarted()),
         child: MaterialApp(
           onGenerateTitle: (context) => Localization.of(context).appTitle,
           localizationsDelegates: Localization.localizationsDelegates,
@@ -95,23 +100,26 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.home),
-            label: localization.navHome,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.history),
-            label: localization.navHistory,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings),
-            label: localization.navSettings,
-          ),
-        ],
+      bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(height: 65),
+        child: NavigationBar(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _onItemTapped,
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.home),
+              label: localization.navHome,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.history),
+              label: localization.navHistory,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.settings),
+              label: localization.navSettings,
+            ),
+          ],
+        ),
       ),
     );
   }

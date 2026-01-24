@@ -27,6 +27,23 @@
   "notificationBuyTitle": "Сигнал купівлі BTC",
   "notificationSellTitle": "Сигнал продажу BTC",
   "notificationBody": "Поточна ціна: {price} · Впевненість {confidence}%",
+  "@notificationBody": {
+    "placeholders": {
+      "price": {},
+      "confidence": {}
+    }
+  },
+  "notificationDecisionBuyTitle": "BTC рішення: Купувати",
+  "notificationDecisionSellTitle": "BTC рішення: Продавати",
+  "notificationDecisionHoldTitle": "BTC рішення: Утримувати",
+  "notificationDecisionBody": "Ціна {price} · EV {ev} · Впевненість {confidence}%",
+  "@notificationDecisionBody": {
+    "placeholders": {
+      "price": {},
+      "ev": {},
+      "confidence": {}
+    }
+  },
   "dayLabel1": "1 день",
   "dayLabel2": "2 дні",
   "dayLabel3": "3 дні",
@@ -34,5 +51,41 @@
   "dayLabel5": "5 днів",
   "dayLabel6": "6 днів",
   "dayLabel7": "7 днів",
-  "chartLoading": "Завантаження графіка..."
+  "chartLoading": "Завантаження графіку...",
+  "decisionEvLabel": "Очікувана дохідність",
+  "decisionEvHint": "Очікувана дохідність (EV) з урахуванням ймовірностей режимів та матриці виплат",
+  "decisionAdjustedLabel": "EV з урахуванням лаґу",
+  "decisionAdjustedHint": "Очікувана дохідність із застосуванням штрафу за оціночний лаґ",
+  "decisionConfidenceLabel": "Впевненість",
+  "decisionConfidenceHint": "Рівень впевненості моделі на основі модульованого сигналу",
+  "decisionSignalSectionTitle": "Сила сигналу",
+  "decisionBaseSignalLabel": "Базовий сигнал",
+  "decisionBaseSignalHint": "Сирий сигнал з похідної/волатильності до модуляції",
+  "decisionModulatedSignalLabel": "Ефективний сигнал",
+  "decisionModulatedSignalHint": "Сигнал після врахування режимів і зміни тренду",
+  "decisionRegimeSectionTitle": "Ймовірності режимів",
+  "decisionBullProbLabel": "Бичачий",
+  "decisionBullProbHint": "Ймовірність того, що ринок у бичачому режимі",
+  "decisionFlatProbLabel": "Флет",
+  "decisionFlatProbHint": "Ймовірність того, що ринок рухається боком",
+  "decisionBearProbLabel": "Ведмежий",
+  "decisionBearProbHint": "Ймовірність того, що ринок у ведмежому режимі",
+  "decisionChangeProbLabel": "Ймовірність зміни",
+  "decisionChangeProbHint": "Ймовірність виявленої структурної зміни (BOCPD)",
+  "decisionLagLabel": "Ефективний лаґ",
+  "decisionLagHint": "Сумарний оціночний лаґ від згладжування та режимів",
+  "decisionMinutes": "{value} хв",
+  "@decisionMinutes": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "decisionPenaltyLabel": "Штраф за лаґ",
+  "decisionPenaltyHint": "Множник, що зменшує EV через лаґ та ризик зміни",
+  "decisionRawConfidenceLabel": "Сирий рівень впевненості",
+  "decisionRawConfidenceHint": "Абсолютна сила модульованого сигналу до калібрування",
+  "decisionCalibratedConfidenceLabel": "Калібрована впевненість",
+  "decisionCalibratedConfidenceHint": "Впевненість після temperature scaling",
+  "decisionPrevActionLabel": "Попередня дія",
+  "decisionPrevActionHint": "Дія, яка трималась до підтвердження переключення"
 }

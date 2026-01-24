@@ -100,6 +100,20 @@ class LocalizationUk extends Localization {
   }
 
   @override
+  String get notificationDecisionBuyTitle => 'BTC рішення: Купувати';
+
+  @override
+  String get notificationDecisionSellTitle => 'BTC рішення: Продавати';
+
+  @override
+  String get notificationDecisionHoldTitle => 'BTC рішення: Утримувати';
+
+  @override
+  String notificationDecisionBody(Object price, Object ev, Object confidence) {
+    return 'Ціна $price · EV $ev · Впевненість $confidence%';
+  }
+
+  @override
   String get dayLabel1 => '1 день';
 
   @override
@@ -121,5 +135,114 @@ class LocalizationUk extends Localization {
   String get dayLabel7 => '7 днів';
 
   @override
-  String get chartLoading => 'Завантаження графіка...';
+  String get chartLoading => 'Завантаження графіку...';
+
+  @override
+  String get decisionEvLabel => 'Очікувана дохідність';
+
+  @override
+  String get decisionEvHint =>
+      'Очікувана дохідність (EV) з урахуванням ймовірностей режимів та матриці виплат';
+
+  @override
+  String get decisionAdjustedLabel => 'EV з урахуванням лаґу';
+
+  @override
+  String get decisionAdjustedHint =>
+      'Очікувана дохідність із застосуванням штрафу за оціночний лаґ';
+
+  @override
+  String get decisionConfidenceLabel => 'Впевненість';
+
+  @override
+  String get decisionConfidenceHint =>
+      'Рівень впевненості моделі на основі модульованого сигналу';
+
+  @override
+  String get decisionSignalSectionTitle => 'Сила сигналу';
+
+  @override
+  String get decisionBaseSignalLabel => 'Базовий сигнал';
+
+  @override
+  String get decisionBaseSignalHint =>
+      'Сирий сигнал з похідної/волатильності до модуляції';
+
+  @override
+  String get decisionModulatedSignalLabel => 'Ефективний сигнал';
+
+  @override
+  String get decisionModulatedSignalHint =>
+      'Сигнал після врахування режимів і зміни тренду';
+
+  @override
+  String get decisionRegimeSectionTitle => 'Ймовірності режимів';
+
+  @override
+  String get decisionBullProbLabel => 'Бичачий';
+
+  @override
+  String get decisionBullProbHint =>
+      'Ймовірність того, що ринок у бичачому режимі';
+
+  @override
+  String get decisionFlatProbLabel => 'Флет';
+
+  @override
+  String get decisionFlatProbHint =>
+      'Ймовірність того, що ринок рухається боком';
+
+  @override
+  String get decisionBearProbLabel => 'Ведмежий';
+
+  @override
+  String get decisionBearProbHint =>
+      'Ймовірність того, що ринок у ведмежому режимі';
+
+  @override
+  String get decisionChangeProbLabel => 'Ймовірність зміни';
+
+  @override
+  String get decisionChangeProbHint =>
+      'Ймовірність виявленої структурної зміни (BOCPD)';
+
+  @override
+  String get decisionLagLabel => 'Ефективний лаґ';
+
+  @override
+  String get decisionLagHint =>
+      'Сумарний оціночний лаґ від згладжування та режимів';
+
+  @override
+  String decisionMinutes(Object value) {
+    return '$value хв';
+  }
+
+  @override
+  String get decisionPenaltyLabel => 'Штраф за лаґ';
+
+  @override
+  String get decisionPenaltyHint =>
+      'Множник, що зменшує EV через лаґ та ризик зміни';
+
+  @override
+  String get decisionRawConfidenceLabel => 'Сирий рівень впевненості';
+
+  @override
+  String get decisionRawConfidenceHint =>
+      'Абсолютна сила модульованого сигналу до калібрування';
+
+  @override
+  String get decisionCalibratedConfidenceLabel => 'Калібрована впевненість';
+
+  @override
+  String get decisionCalibratedConfidenceHint =>
+      'Впевненість після temperature scaling';
+
+  @override
+  String get decisionPrevActionLabel => 'Попередня дія';
+
+  @override
+  String get decisionPrevActionHint =>
+      'Дія, яка трималась до підтвердження переключення';
 }

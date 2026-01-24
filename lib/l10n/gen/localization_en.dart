@@ -99,6 +99,20 @@ class LocalizationEn extends Localization {
   }
 
   @override
+  String get notificationDecisionBuyTitle => 'BTC decision: Buy';
+
+  @override
+  String get notificationDecisionSellTitle => 'BTC decision: Sell';
+
+  @override
+  String get notificationDecisionHoldTitle => 'BTC decision: Hold';
+
+  @override
+  String notificationDecisionBody(Object price, Object ev, Object confidence) {
+    return 'Price $price · EV $ev · Confidence $confidence%';
+  }
+
+  @override
   String get dayLabel1 => '1 day';
 
   @override
@@ -121,4 +135,113 @@ class LocalizationEn extends Localization {
 
   @override
   String get chartLoading => 'Loading chart...';
+
+  @override
+  String get decisionEvLabel => 'Expected value';
+
+  @override
+  String get decisionEvHint =>
+      'Expected value (EV) based on regime probabilities and payoff matrix';
+
+  @override
+  String get decisionAdjustedLabel => 'Lag-adjusted EV';
+
+  @override
+  String get decisionAdjustedHint =>
+      'Expected value adjusted by the estimated execution lag penalty';
+
+  @override
+  String get decisionConfidenceLabel => 'Confidence';
+
+  @override
+  String get decisionConfidenceHint =>
+      'Model confidence derived from the modulated signal strength';
+
+  @override
+  String get decisionSignalSectionTitle => 'Signal strength';
+
+  @override
+  String get decisionBaseSignalLabel => 'Base signal';
+
+  @override
+  String get decisionBaseSignalHint =>
+      'Raw signal from derivative/volatility ratio before modulation';
+
+  @override
+  String get decisionModulatedSignalLabel => 'Effective signal';
+
+  @override
+  String get decisionModulatedSignalHint =>
+      'Signal after regime and change-point modulation';
+
+  @override
+  String get decisionRegimeSectionTitle => 'Regime probabilities';
+
+  @override
+  String get decisionBullProbLabel => 'Bull';
+
+  @override
+  String get decisionBullProbHint =>
+      'Probability that market is currently in a bullish regime';
+
+  @override
+  String get decisionFlatProbLabel => 'Flat';
+
+  @override
+  String get decisionFlatProbHint =>
+      'Probability that market is currently moving sideways';
+
+  @override
+  String get decisionBearProbLabel => 'Bear';
+
+  @override
+  String get decisionBearProbHint =>
+      'Probability that market is currently in a bearish regime';
+
+  @override
+  String get decisionChangeProbLabel => 'Change probability';
+
+  @override
+  String get decisionChangeProbHint =>
+      'Probability of a detected structural change (BOCPD)';
+
+  @override
+  String get decisionLagLabel => 'Effective lag';
+
+  @override
+  String get decisionLagHint =>
+      'Combined estimated lag from smoothing and regime filters';
+
+  @override
+  String decisionMinutes(Object value) {
+    return '$value min';
+  }
+
+  @override
+  String get decisionPenaltyLabel => 'Lag penalty';
+
+  @override
+  String get decisionPenaltyHint =>
+      'Multiplier applied to EV due to lag and change risk';
+
+  @override
+  String get decisionRawConfidenceLabel => 'Raw confidence';
+
+  @override
+  String get decisionRawConfidenceHint =>
+      'Absolute modulated signal strength before calibration';
+
+  @override
+  String get decisionCalibratedConfidenceLabel => 'Calibrated confidence';
+
+  @override
+  String get decisionCalibratedConfidenceHint =>
+      'Confidence adjusted via temperature scaling';
+
+  @override
+  String get decisionPrevActionLabel => 'Previous action';
+
+  @override
+  String get decisionPrevActionHint =>
+      'The action held before hysteresis confirmed a switch';
 }

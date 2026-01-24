@@ -39,6 +39,17 @@
       "confidence": {}
     }
   },
+  "notificationDecisionBuyTitle": "BTC decision: Buy",
+  "notificationDecisionSellTitle": "BTC decision: Sell",
+  "notificationDecisionHoldTitle": "BTC decision: Hold",
+  "notificationDecisionBody": "Price {price} · EV {ev} · Confidence {confidence}%",
+  "@notificationDecisionBody": {
+    "placeholders": {
+      "price": {},
+      "ev": {},
+      "confidence": {}
+    }
+  },
   "dayLabel1": "1 day",
   "dayLabel2": "2 days",
   "dayLabel3": "3 days",
@@ -46,5 +57,41 @@
   "dayLabel5": "5 days",
   "dayLabel6": "6 days",
   "dayLabel7": "7 days",
-  "chartLoading": "Loading chart..."
+  "chartLoading": "Loading chart...",
+  "decisionEvLabel": "Expected value",
+  "decisionEvHint": "Expected value (EV) based on regime probabilities and payoff matrix",
+  "decisionAdjustedLabel": "Lag-adjusted EV",
+  "decisionAdjustedHint": "Expected value adjusted by the estimated execution lag penalty",
+  "decisionConfidenceLabel": "Confidence",
+  "decisionConfidenceHint": "Model confidence derived from the modulated signal strength",
+  "decisionSignalSectionTitle": "Signal strength",
+  "decisionBaseSignalLabel": "Base signal",
+  "decisionBaseSignalHint": "Raw signal from derivative/volatility ratio before modulation",
+  "decisionModulatedSignalLabel": "Effective signal",
+  "decisionModulatedSignalHint": "Signal after regime and change-point modulation",
+  "decisionRegimeSectionTitle": "Regime probabilities",
+  "decisionBullProbLabel": "Bull",
+  "decisionBullProbHint": "Probability that market is currently in a bullish regime",
+  "decisionFlatProbLabel": "Flat",
+  "decisionFlatProbHint": "Probability that market is currently moving sideways",
+  "decisionBearProbLabel": "Bear",
+  "decisionBearProbHint": "Probability that market is currently in a bearish regime",
+  "decisionChangeProbLabel": "Change probability",
+  "decisionChangeProbHint": "Probability of a detected structural change (BOCPD)",
+  "decisionLagLabel": "Effective lag",
+  "decisionLagHint": "Combined estimated lag from smoothing and regime filters",
+  "decisionMinutes": "{value} min",
+  "@decisionMinutes": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "decisionPenaltyLabel": "Lag penalty",
+  "decisionPenaltyHint": "Multiplier applied to EV due to lag and change risk",
+  "decisionRawConfidenceLabel": "Raw confidence",
+  "decisionRawConfidenceHint": "Absolute modulated signal strength before calibration",
+  "decisionCalibratedConfidenceLabel": "Calibrated confidence",
+  "decisionCalibratedConfidenceHint": "Confidence adjusted via temperature scaling",
+  "decisionPrevActionLabel": "Previous action",
+  "decisionPrevActionHint": "The action held before hysteresis confirmed a switch"
 }

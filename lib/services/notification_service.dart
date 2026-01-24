@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../domain/pipeline/decision/payoff_matrix.dart';
 import '../l10n/gen/localization.dart';
 import '../utils/analytics.dart';
 import '../utils/helpers.dart';
@@ -77,6 +78,40 @@ class NotificationService {
     );
 
     await _plugin.show(signal.index + 1, title, body, details);
+  }
+
+  Future<void> showDecisionNotification({
+    required TradingDecision decision,
+    required double confidence,
+    required double priceUsd,
+    required double expectedValue,
+  }) async {
+    if (!_initialized) await initialize();
+    updateLocale(_locale);
+
+    final title = switch (decision) {
+      TradingDecision.buy => _localization.notificationDecisionBuyTitle,
+      TradingDecision.sell => _localization.notificationDecisionSellTitle,
+      TradingDecision.hold => _localization.notificationDecisionHoldTitle,
+    };
+
+    final body = _localization.notificationDecisionBody(
+      AppHelpers.formatPrice(priceUsd),
+      expectedValue.toStringAsFixed(1),
+      (confidence * 100).toStringAsFixed(1),
+    );
+
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        _signalChannel.id,
+        _signalChannel.name,
+        channelDescription: _signalChannel.description,
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+    );
+
+    await _plugin.show(decision.index + 10, title, body, details);
   }
 
   // TODO: Implement trend notification

@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 
+import '../../domain/pipeline/decision/advanced_decision_engine.dart';
+import '../../domain/pipeline/decision/payoff_matrix.dart';
 import '../../models/price_entry.dart';
 import '../../repository/price_repository.dart';
 import '../../services/notification_service.dart';
-import '../../utils/analytics.dart';
 import '../../utils/helpers.dart';
 import 'price_event.dart';
 import 'price_state.dart';
@@ -14,6 +15,7 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
   PriceBloc(
     this._repository,
     this._notificationService,
+    this._decisionEngine,
   ) : super(const PriceState()) {
     on<PriceStarted>(_onStarted);
     on<PriceManualRefreshRequested>(_onManualRefresh);
@@ -21,6 +23,7 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
 
   final PriceRepository _repository;
   final NotificationService _notificationService;
+  final AdvancedDecisionEngine _decisionEngine;
   Timer? _timer;
 
   Future<void> _onStarted(
@@ -56,14 +59,19 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
       final sevenDayChange = _calculateChange(history, 7);
       final threeDayChange = _calculateChange(history, 3);
       final trendSignal = _detectTrendSignal(history);
-      final decision = AnalyticsEngine.evaluate(history);
+      final advancedDecision = await _decisionEngine.evaluate(
+        days: 30,
+        previousAction: state.advancedDecision?.decision.finalAction,
+      );
 
-      final previousSignal = state.decisionResult?.signal;
-      if (decision.signal != TradingSignal.hold && decision.signal != previousSignal) {
-        await _notificationService.showTradingNotification(
-          signal: decision.signal,
-          confidence: decision.confidence,
+      final previousDecision = state.advancedDecision?.decision.finalAction;
+      final nextAction = advancedDecision.decision.finalAction;
+      if (nextAction != TradingDecision.hold && nextAction != previousDecision) {
+        await _notificationService.showDecisionNotification(
+          decision: nextAction,
+          confidence: advancedDecision.decision.confidence,
           priceUsd: quote.usd,
+          expectedValue: advancedDecision.decision.expectedValue,
         );
       }
 
@@ -75,7 +83,7 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
           sevenDayChange: sevenDayChange,
           threeDayChange: threeDayChange,
           trendSignal: trendSignal,
-          decisionResult: decision,
+          advancedDecision: advancedDecision,
           errorMessage: null,
         ),
       );

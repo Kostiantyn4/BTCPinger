@@ -1,19 +1,22 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/widgets.dart';
 
+import '../config/app_config.dart';
+import '../domain/pipeline/decision/decision_engine_factory.dart';
+import '../domain/pipeline/decision/payoff_matrix.dart';
 import '../services/btc_price_service.dart';
 import '../services/notification_service.dart';
-import '../utils/analytics.dart';
 
 class AlarmManagerService {
   static const int priceMonitorId = 1001;
 
   static Future<void> schedulePriceMonitoring() async {
+    final cfg = AppConfig.backgroundMonitoring;
     await AndroidAlarmManager.periodic(
-      const Duration(minutes: 15),
+      cfg.refreshInterval,
       priceMonitorId,
       priceMonitorCallback,
-      startAt: DateTime.now().add(const Duration(minutes: 1)),
+      startAt: DateTime.now().add(cfg.initialDelay),
       allowWhileIdle: true,
       wakeup: true,
     );
@@ -30,14 +33,17 @@ Future<void> priceMonitorCallback() async {
   final priceService = BtcPriceService();
   try {
     final quote = await priceService.fetchCurrentQuote();
-    final history = await priceService.fetchMarketChart(days: 7);
-    final decision = AnalyticsEngine.evaluate(history);
+    final cfg = AppConfig.backgroundMonitoring;
+    final engine = DecisionEngineFactory.fromService(priceService);
+    final decision = await engine.evaluate(days: cfg.pipelineWindowDays);
+    final action = decision.decision.finalAction;
 
-    if (decision.signal != TradingSignal.hold) {
-      await notificationService.showTradingNotification(
-        signal: decision.signal,
-        confidence: decision.confidence,
+    if (action != TradingDecision.hold) {
+      await notificationService.showDecisionNotification(
+        decision: action,
+        confidence: decision.decision.confidence,
         priceUsd: quote.usd,
+        expectedValue: decision.decision.expectedValue,
       );
     }
   } catch (_) {

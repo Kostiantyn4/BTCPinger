@@ -266,6 +266,30 @@ abstract class Localization {
   /// **'Current price: {price} · Confidence {confidence}%'**
   String notificationBody(Object price, Object confidence);
 
+  /// No description provided for @notificationDecisionBuyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC decision: Buy'**
+  String get notificationDecisionBuyTitle;
+
+  /// No description provided for @notificationDecisionSellTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC decision: Sell'**
+  String get notificationDecisionSellTitle;
+
+  /// No description provided for @notificationDecisionHoldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC decision: Hold'**
+  String get notificationDecisionHoldTitle;
+
+  /// No description provided for @notificationDecisionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Price {price} · EV {ev} · Confidence {confidence}%'**
+  String notificationDecisionBody(Object price, Object ev, Object confidence);
+
   /// No description provided for @dayLabel1.
   ///
   /// In en, this message translates to:
@@ -313,6 +337,192 @@ abstract class Localization {
   /// In en, this message translates to:
   /// **'Loading chart...'**
   String get chartLoading;
+
+  /// No description provided for @decisionEvLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected value'**
+  String get decisionEvLabel;
+
+  /// No description provided for @decisionEvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected value (EV) based on regime probabilities and payoff matrix'**
+  String get decisionEvHint;
+
+  /// No description provided for @decisionAdjustedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lag-adjusted EV'**
+  String get decisionAdjustedLabel;
+
+  /// No description provided for @decisionAdjustedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected value adjusted by the estimated execution lag penalty'**
+  String get decisionAdjustedHint;
+
+  /// No description provided for @decisionConfidenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence'**
+  String get decisionConfidenceLabel;
+
+  /// No description provided for @decisionConfidenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Model confidence derived from the modulated signal strength'**
+  String get decisionConfidenceHint;
+
+  /// No description provided for @decisionSignalSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signal strength'**
+  String get decisionSignalSectionTitle;
+
+  /// No description provided for @decisionBaseSignalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Base signal'**
+  String get decisionBaseSignalLabel;
+
+  /// No description provided for @decisionBaseSignalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw signal from derivative/volatility ratio before modulation'**
+  String get decisionBaseSignalHint;
+
+  /// No description provided for @decisionModulatedSignalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Effective signal'**
+  String get decisionModulatedSignalLabel;
+
+  /// No description provided for @decisionModulatedSignalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Signal after regime and change-point modulation'**
+  String get decisionModulatedSignalHint;
+
+  /// No description provided for @decisionRegimeSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regime probabilities'**
+  String get decisionRegimeSectionTitle;
+
+  /// No description provided for @decisionBullProbLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bull'**
+  String get decisionBullProbLabel;
+
+  /// No description provided for @decisionBullProbHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Probability that market is currently in a bullish regime'**
+  String get decisionBullProbHint;
+
+  /// No description provided for @decisionFlatProbLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Flat'**
+  String get decisionFlatProbLabel;
+
+  /// No description provided for @decisionFlatProbHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Probability that market is currently moving sideways'**
+  String get decisionFlatProbHint;
+
+  /// No description provided for @decisionBearProbLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bear'**
+  String get decisionBearProbLabel;
+
+  /// No description provided for @decisionBearProbHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Probability that market is currently in a bearish regime'**
+  String get decisionBearProbHint;
+
+  /// No description provided for @decisionChangeProbLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change probability'**
+  String get decisionChangeProbLabel;
+
+  /// No description provided for @decisionChangeProbHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Probability of a detected structural change (BOCPD)'**
+  String get decisionChangeProbHint;
+
+  /// No description provided for @decisionLagLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Effective lag'**
+  String get decisionLagLabel;
+
+  /// No description provided for @decisionLagHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Combined estimated lag from smoothing and regime filters'**
+  String get decisionLagHint;
+
+  /// No description provided for @decisionMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} min'**
+  String decisionMinutes(Object value);
+
+  /// No description provided for @decisionPenaltyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lag penalty'**
+  String get decisionPenaltyLabel;
+
+  /// No description provided for @decisionPenaltyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiplier applied to EV due to lag and change risk'**
+  String get decisionPenaltyHint;
+
+  /// No description provided for @decisionRawConfidenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw confidence'**
+  String get decisionRawConfidenceLabel;
+
+  /// No description provided for @decisionRawConfidenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Absolute modulated signal strength before calibration'**
+  String get decisionRawConfidenceHint;
+
+  /// No description provided for @decisionCalibratedConfidenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibrated confidence'**
+  String get decisionCalibratedConfidenceLabel;
+
+  /// No description provided for @decisionCalibratedConfidenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence adjusted via temperature scaling'**
+  String get decisionCalibratedConfidenceHint;
+
+  /// No description provided for @decisionPrevActionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous action'**
+  String get decisionPrevActionLabel;
+
+  /// No description provided for @decisionPrevActionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The action held before hysteresis confirmed a switch'**
+  String get decisionPrevActionHint;
 }
 
 class _LocalizationDelegate extends LocalizationsDelegate<Localization> {

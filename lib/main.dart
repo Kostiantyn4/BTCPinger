@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,16 +10,29 @@ import 'database/isar_database.dart';
 import 'database/price_local_data_source.dart';
 import 'repository/price_repository.dart';
 import 'services/btc_price_service.dart';
+import 'services/notification_service.dart';
+import 'services/alarm_manager_service.dart';
+import 'l10n/gen/localization.dart';
 import 'ui/home_screen.dart';
 import 'ui/price_history_screen.dart';
 import 'ui/settings_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+    await AlarmManagerService.schedulePriceMonitoring();
+  }
+
+  runApp(MyApp(notificationService: notificationService));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.notificationService});
+
+  final NotificationService? notificationService;
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +41,25 @@ class MyApp extends StatelessWidget {
       localDataSource: PriceLocalDataSource(IsarDatabase.instance),
     );
 
+    final resolvedNotificationService = notificationService ?? NotificationService();
+
     return RepositoryProvider.value(
       value: repository,
       child: BlocProvider(
-        create: (_) => PriceBloc(repository)..add(const PriceStarted()),
+        create: (_) =>
+            PriceBloc(repository, resolvedNotificationService)..add(const PriceStarted()),
         child: MaterialApp(
-          title: 'BTC Pinger',
+          onGenerateTitle: (context) => Localization.of(context).appTitle,
+          localizationsDelegates: Localization.localizationsDelegates,
+          supportedLocales: Localization.supportedLocales,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
             useMaterial3: true,
           ),
+          builder: (context, child) {
+            resolvedNotificationService.updateLocale(Localizations.localeOf(context));
+            return child ?? const SizedBox.shrink();
+          },
           home: const MainScreen(),
         ),
       ),
@@ -66,23 +91,25 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = Localization.of(context);
+
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onItemTapped,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: const Icon(Icons.home),
+            label: localization.navHome,
           ),
           NavigationDestination(
-            icon: Icon(Icons.history),
-            label: 'History',
+            icon: const Icon(Icons.history),
+            label: localization.navHistory,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: localization.navSettings,
           ),
         ],
       ),

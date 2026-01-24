@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 
 import '../../models/price_entry.dart';
 import '../../repository/price_repository.dart';
+import '../../services/notification_service.dart';
+import '../../utils/analytics.dart';
 import '../../utils/helpers.dart';
 import 'price_event.dart';
 import 'price_state.dart';
@@ -11,12 +13,14 @@ import 'price_state.dart';
 class PriceBloc extends Bloc<PriceEvent, PriceState> {
   PriceBloc(
     this._repository,
+    this._notificationService,
   ) : super(const PriceState()) {
     on<PriceStarted>(_onStarted);
     on<PriceManualRefreshRequested>(_onManualRefresh);
   }
 
   final PriceRepository _repository;
+  final NotificationService _notificationService;
   Timer? _timer;
 
   Future<void> _onStarted(
@@ -52,6 +56,16 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
       final sevenDayChange = _calculateChange(history, 7);
       final threeDayChange = _calculateChange(history, 3);
       final trendSignal = _detectTrendSignal(history);
+      final decision = AnalyticsEngine.evaluate(history);
+
+      final previousSignal = state.decisionResult?.signal;
+      if (decision.signal != TradingSignal.hold && decision.signal != previousSignal) {
+        await _notificationService.showTradingNotification(
+          signal: decision.signal,
+          confidence: decision.confidence,
+          priceUsd: quote.usd,
+        );
+      }
 
       emit(
         state.copyWith(
@@ -61,6 +75,7 @@ class PriceBloc extends Bloc<PriceEvent, PriceState> {
           sevenDayChange: sevenDayChange,
           threeDayChange: threeDayChange,
           trendSignal: trendSignal,
+          decisionResult: decision,
           errorMessage: null,
         ),
       );

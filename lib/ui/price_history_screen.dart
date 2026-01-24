@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/gen/localization.dart';
+
 class PriceHistoryScreen extends StatelessWidget {
   const PriceHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localization = Localization.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Price History'),
+        title: Text(localization.priceHistoryTitle),
         centerTitle: true,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.show_chart,
               size: 64,
               color: Colors.grey,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              'Price history will be displayed here',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              localization.priceHistoryPlaceholder,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),

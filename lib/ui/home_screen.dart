@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../bloc/price/price_bloc.dart';
 import '../bloc/price/price_state.dart';
+import '../l10n/gen/localization.dart';
+import '../utils/analytics.dart';
 import '../utils/helpers.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final localization = Localization.of(context);
     return Scaffold(
       backgroundColor: _HomeColors.background,
       body: SafeArea(
@@ -29,15 +32,17 @@ class _HomeScreenState extends State<HomeScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(textTheme, state),
+                  _buildHeader(textTheme, state, localization),
                   const SizedBox(height: 24),
-                  _TrendCard(state: state),
+                  _TrendCard(state: state, localization: localization),
                   const SizedBox(height: 24),
-                  _buildChartSection(state),
+                  _buildDecisionCard(state, localization),
                   const SizedBox(height: 24),
-                  _buildChangeCard(state),
+                  _buildChartSection(state, localization),
+                  const SizedBox(height: 24),
+                  _buildChangeCard(state, localization),
                   const SizedBox(height: 12),
-                  _buildAlertText(state),
+                  _buildAlertText(state, localization),
                 ],
               );
             },
@@ -47,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildHeader(TextTheme textTheme, PriceState state) {
+  Widget _buildHeader(TextTheme textTheme, PriceState state, Localization localization) {
     return Row(
       children: [
         const SizedBox(width: 16),
@@ -55,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Text(
-                'Аналітика трендів',
+                localization.headerTitle,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.spaceGrotesk(
                   color: Colors.white,
@@ -83,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildChartSection(PriceState state) {
+  Widget _buildChartSection(PriceState state, Localization localization) {
     final history = state.history;
     final spots = List<FlSpot>.generate(
       history.length,
@@ -103,8 +108,18 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 180,
             child: spots.isEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 12),
+                        Text(
+                          localization.chartLoading,
+                          style: GoogleFonts.notoSans(color: Colors.white70),
+                        ),
+                      ],
+                    ),
                   )
                 : LineChart(
                     LineChartData(
@@ -147,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: DayLabel.values
                 .map(
                   (day) => Text(
-                    day.label,
+                    day.label(localization),
                     style: GoogleFonts.spaceGrotesk(
                       color: _HomeColors.accent,
                       fontWeight: FontWeight.w600,
@@ -163,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildChangeCard(PriceState state) {
+  Widget _buildChangeCard(PriceState state, Localization localization) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -175,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Зміна за останні 3 дні',
+            localization.changeCardTitle,
             style: GoogleFonts.notoSans(
               color: Colors.white,
               fontSize: 16,
@@ -193,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Семиденна: ${state.sevenDayChange.toStringAsFixed(2)}%',
+            localization
+                .changeCardSevenDay('${state.sevenDayChange.toStringAsFixed(2)}%'),
             style: GoogleFonts.notoSans(
               color: state.sevenDayChange >= 0
                   ? _HomeColors.positive
@@ -207,10 +223,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAlertText(PriceState state) {
-    final message = state.trendSignal
-        ? 'Ціна зростала 3 дні поспіль, а потім зафіксовано падіння — уважно слідкуйте за сигналом.'
-        : 'Помітних критичних трендів не зафіксовано.';
+  Widget _buildAlertText(PriceState state, Localization localization) {
+    final message =
+        state.trendSignal ? localization.alertTrendDetected : localization.alertNoTrend;
 
     return Text(
       message,
@@ -221,12 +236,103 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildDecisionCard(PriceState state, Localization localization) {
+    final decision = state.decisionResult;
+    if (decision == null) {
+      return const SizedBox.shrink();
+    }
+
+    String signalLabel;
+    Color signalColor;
+    switch (decision.signal) {
+      case TradingSignal.buy:
+        signalLabel = localization.decisionBuy;
+        signalColor = _HomeColors.positive;
+        break;
+      case TradingSignal.sell:
+        signalLabel = localization.decisionSell;
+        signalColor = Colors.redAccent;
+        break;
+      default:
+        signalLabel = localization.decisionHold;
+        signalColor = _HomeColors.accent;
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _HomeColors.card,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            localization.decisionCardTitle,
+            style: GoogleFonts.notoSans(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                signalLabel,
+                style: GoogleFonts.spaceGrotesk(
+                  color: signalColor,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${(decision.confidence * 100).toStringAsFixed(1)}%',
+                style: GoogleFonts.notoSans(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...decision.components.entries.map(
+            (entry) => Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _resolveModelLabel(entry.key, localization),
+                    style: GoogleFonts.notoSans(
+                      color: _HomeColors.accent,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    '${entry.value.signal.name.toUpperCase()} · ${(entry.value.confidence * 100).toStringAsFixed(0)}%',
+                    style: GoogleFonts.notoSans(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _TrendCard extends StatelessWidget {
-  const _TrendCard({required this.state});
+  const _TrendCard({required this.state, required this.localization});
 
   final PriceState state;
+  final Localization localization;
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +348,7 @@ class _TrendCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Динаміка курсу за 7 днів',
+            localization.trendCardTitle,
             style: GoogleFonts.notoSans(
               color: Colors.white,
               fontSize: 16,
@@ -264,7 +370,7 @@ class _TrendCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Останні 7 днів',
+                localization.trendCardSubtitle,
                 style: GoogleFonts.notoSans(
                   color: _HomeColors.accent,
                   fontSize: 16,
@@ -295,19 +401,40 @@ class _HomeColors {
   static const card = Color(0xFF493F22);
   static const accent = Color(0xFFCbbc90);
   static const positive = Color(0xFF0BDA1D);
-  static const switchActive = Color(0xFFF2B90C);
 }
 
-enum DayLabel {
-  first('1 день'),
-  second('2 дні'),
-  third('3 дні'),
-  fourth('4 дні'),
-  fifth('5 днів'),
-  sixth('6 днів'),
-  seventh('7 днів');
+enum DayLabel { first, second, third, fourth, fifth, sixth, seventh; }
 
-  const DayLabel(this.label);
+String _resolveModelLabel(String key, Localization localization) {
+  switch (key) {
+    case 'ma':
+      return localization.modelLabelMa;
+    case 'rsi':
+      return localization.modelLabelRsi;
+    case 'markov':
+      return localization.modelLabelMarkov;
+    default:
+      return key.toUpperCase();
+  }
+}
 
-  final String label;
+extension on DayLabel {
+  String label(Localization localization) {
+    switch (this) {
+      case DayLabel.first:
+        return localization.dayLabel1;
+      case DayLabel.second:
+        return localization.dayLabel2;
+      case DayLabel.third:
+        return localization.dayLabel3;
+      case DayLabel.fourth:
+        return localization.dayLabel4;
+      case DayLabel.fifth:
+        return localization.dayLabel5;
+      case DayLabel.sixth:
+        return localization.dayLabel6;
+      case DayLabel.seventh:
+        return localization.dayLabel7;
+    }
+  }
 }

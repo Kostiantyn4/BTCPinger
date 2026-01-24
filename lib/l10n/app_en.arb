@@ -1,0 +1,50 @@
+{
+  "appTitle": "BTC Pinger",
+  "navHome": "Home",
+  "navHistory": "History",
+  "navSettings": "Settings",
+  "headerTitle": "Trend analytics",
+  "trendCardTitle": "7-day price dynamics",
+  "trendCardSubtitle": "Last 7 days",
+  "changeCardTitle": "Change over last 3 days",
+  "changeCardSevenDay": "7-day: {value}",
+  "@changeCardSevenDay": {
+    "description": "Label that shows the seven day percentage change",
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "alertTrendDetected": "Price grew for 3 days in a row and then dropped — monitor the signal closely.",
+  "alertNoTrend": "No critical trends detected.",
+  "decisionCardTitle": "Decision Engine",
+  "decisionBuy": "Buy",
+  "decisionSell": "Sell",
+  "decisionHold": "Hold",
+  "modelLabelMa": "MA + σ",
+  "modelLabelRsi": "RSI",
+  "modelLabelMarkov": "Markov",
+  "priceHistoryTitle": "Price History",
+  "priceHistoryPlaceholder": "Price history will be displayed here",
+  "settingsTitle": "Settings",
+  "settingsPriceAlertsTitle": "Price Alerts",
+  "settingsPriceAlertsDescription": "Configure your price thresholds and notification settings here",
+  "settingsTrendTitle": "Trend Analysis",
+  "settingsTrendDescription": "Set up trend monitoring parameters",
+  "notificationBuyTitle": "BTC Buy Signal",
+  "notificationSellTitle": "BTC Sell Signal",
+  "notificationBody": "Current price: {price} · Confidence {confidence}%",
+  "@notificationBody": {
+    "placeholders": {
+      "price": {},
+      "confidence": {}
+    }
+  },
+  "dayLabel1": "1 day",
+  "dayLabel2": "2 days",
+  "dayLabel3": "3 days",
+  "dayLabel4": "4 days",
+  "dayLabel5": "5 days",
+  "dayLabel6": "6 days",
+  "dayLabel7": "7 days",
+  "chartLoading": "Loading chart..."
+}

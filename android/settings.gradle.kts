@@ -23,3 +23,11 @@ plugins {
 }
 
 include(":app")
+gradle.beforeProject {
+    if (name == "isar_flutter_libs") {
+        extensions.findByName("android")?.let { ext ->
+            val method = ext::class.java.methods.firstOrNull { it.name == "setNamespace" }
+            method?.invoke(ext, "com.isar_flutter_libs")
+        }
+    }
+}
